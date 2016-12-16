@@ -24,16 +24,15 @@ Set deck = Nothing
 Set face = Nothing
 Set symbols = Nothing
 Dim i As Long
-
 For i = 1 To 52
-deck.Add i
+    deck.Add i
 Next i
-
-atomic
-
+Cards
+        
 End Sub
 
 Sub draw(draw As Long)
+        
 Dim randc As Long
 Dim upperbound As Long
 Dim cardnumber As Long
@@ -42,7 +41,6 @@ Dim i As Long
 Dim lastrow As Long
 lastrow = Cells(Rows.count, 14).End(xlUp).row
 For i = 1 To draw
-
     upperbound = deck.count
     If upperbound = 0 Then
         MsgBox "Out of cards"
@@ -58,4 +56,5 @@ For i = 1 To draw
     lastrow = lastrow + 1
     Cells(lastrow, 14).Value = actualcard
 Next i
+
 End Sub
