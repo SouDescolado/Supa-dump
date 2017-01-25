@@ -1,4 +1,7 @@
 Sub BuscaCorreio(repeat As Long)
+    '----- Desenvolvido por /u/SouDescolado ------------------------------
+    '----- Dúvidas ou sugestões por email wizardoffate@gmail.com ---------
+    
     Dim Crast As Worksheet
     Set Crast = Sheets("Rastreios Correios")
     Dim Cres As Worksheet
@@ -14,7 +17,7 @@ Sub BuscaCorreio(repeat As Long)
     Dim resp As String
     Dim stat As String
     Dim objCollection As Object
-    ' Create InternetExplorer Object
+    ' Cria uma janela no internet explorer
     Set IE = CreateObject("InternetExplorer.Application")
     lr = Cres.Cells(Rows.Count, 1).End(xlUp).Row
     resp = MsgBox("Você quer limpar os resultados?", vbYesNoCancel)
@@ -24,16 +27,16 @@ Sub BuscaCorreio(repeat As Long)
     ElseIf resp = vbCancel Then
         Exit Sub
     End If
-For m = 1 To repeat
+For m = 2 To repeat
     rastreio = Crast.Cells(m, 1).Value
-    ' You can uncoment Next line To see form results
+    'Se botar a linha abaixo como comentário dá pra ver o que tá acontecendo no internet explorer
     IE.Visible = False
 
-    ' URL to get data from
+    'Qual o url do site dos correios que to usando
     IE.Navigate "http://websro.correios.com.br/sro_bin/txect01$.startup?P_LINGUA=001&P_TIPO=001"
-    ' Statusbar
+    'Coloca situação carregando na barrinha do excel, lá embaixo
     Application.StatusBar = "Carregando"
-    ' Wait while IE loading...
+    'Espera o Internet Explorer carregar (Com negocinho que roda pra ficar bonitinho)
     On Error Resume Next
     Do While IE.Busy
         DoEvents
@@ -53,7 +56,7 @@ For m = 1 To repeat
         End If
         Application.StatusBar = "Carregando " & j
     Loop
-    'Rastreio
+    'Põe o rastreio no site e clica buscar
     Set objCollection = IE.document.getElementsByTagName("input")
     i = 0
     While i < objCollection.Length
@@ -66,6 +69,7 @@ For m = 1 To repeat
         i = i + 1
     Wend
 leave0:
+    'Espera o Internet Explorer carregar (Com negocinho que roda pra ficar bonitinho)
     Do While IE.Busy
         DoEvents
         Application.Wait DateAdd("s", 1, Now)
@@ -84,9 +88,10 @@ leave0:
         End If
         Application.StatusBar = "Carregando " & j
     Loop
-    'Extrai informação
+    'Extrai informação da ultima atualização do site.
     lr = lr + 1
     Cres.Cells(lr, 1).Value = rastreio
+    Cres.Cells(lr, 2).Value = Crast.Cells(m, 2).Value
     Set objCollection = IE.document.getElementsByTagName("tr")
     For i = 0 To objCollection.Length - 1
     DoEvents
@@ -102,10 +107,10 @@ leave0:
                     For k = 1 To cod.Cells(Rows.Count, 1).End(xlUp).Row
                     DoEvents
                         If stat = cod.Cells(k, 1).Value Then
-                            l = 4
-                            Cres.Cells(lr, 2).Value = IE.document.getElementsByTagName("tr")(i).getElementsByTagName("td")(c - 2).innertext
-                            Cres.Cells(lr, 3).Value = stat
-                            Cres.Cells(lr, 4).Value = IE.document.getElementsByTagName("tr")(i).getElementsByTagName("td")(c - 1).innertext
+                            l = 5
+                            Cres.Cells(lr, 3).Value = CDate(IE.document.getElementsByTagName("tr")(i).getElementsByTagName("td")(c - 2).innertext)
+                            Cres.Cells(lr, 4).Value = stat
+                            Cres.Cells(lr, 5).Value = IE.document.getElementsByTagName("tr")(i).getElementsByTagName("td")(c - 1).innertext
                             ult = 1
                             stat = vbNullString
                             Exit For
@@ -118,15 +123,11 @@ leave0:
             End If
     Next i
 Next m
-    
-
-    ' Show IE
+    'Mostra o Internet Explorer e fecha
     IE.Visible = True
     IE.Quit
-    ' Clean up
+    'Limpeza
     Set IE = Nothing
     Application.StatusBar = ""
 
 End Sub
-
-
