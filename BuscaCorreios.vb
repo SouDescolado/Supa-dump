@@ -20,6 +20,9 @@ Sub BuscaCorreio(repeat As Long)
     ' Cria uma janela no internet explorer
     Set IE = CreateObject("InternetExplorer.Application")
     lr = Cres.Cells(Rows.Count, 1).End(xlUp).Row
+    If lr = 1 Then
+        lr = 2
+    End If
     resp = MsgBox("Você quer limpar os resultados?", vbYesNoCancel)
     If resp = vbYes Then
         Cres.Range("A2:Z" & lr).Clear
