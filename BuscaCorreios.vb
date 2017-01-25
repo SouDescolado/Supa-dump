@@ -22,7 +22,7 @@ Sub BuscaCorreio(repeat As Long)
     lr = Cres.Cells(Rows.Count, 1).End(xlUp).Row
     resp = MsgBox("Você quer limpar os resultados?", vbYesNoCancel)
     If resp = vbYes Then
-        Cres.Range("A2:E" & lr).Clear
+        Cres.Range("A2:Z" & lr).Clear
         lr = 1
     ElseIf resp = vbCancel Then
         Exit Sub
